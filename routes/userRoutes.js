@@ -5,16 +5,15 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 router.post('/sign-up', authController.signUp);
+router.post('/login', authController.login);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password/:token', authController.resetPassword);
 
-router
-  .route('/')
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
+router.route('/').get(authController.protect, userController.getAllUsers);
 
 router
   .route('/:id')
-  .get(userController.getUser)
-  .post(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(authController.protect, userController.getUser)
+  .post(authController.protect, userController.updateUser);
 
 module.exports = router;
