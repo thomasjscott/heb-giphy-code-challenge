@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
@@ -14,13 +15,16 @@ mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
   })
-  .then(connection => {
-    console.log(connection.connections);
-  });
+  .then(() => console.log('DB Connection successful!'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
+});
+
+process.on('uncaughtException', err => {
+  console.log(err.name, err.message);
 });
