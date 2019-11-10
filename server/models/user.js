@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema(
         message: 'Password and Confirm Password are not the same.'
       }
     },
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date

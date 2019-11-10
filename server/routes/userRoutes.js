@@ -10,6 +10,14 @@ router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);
 
 router.route('/').get(authController.protect, userController.getAllUsers);
+router
+  .route('/my-info')
+  .get(authController.protect, userController.getCurrentUser);
+
+router
+  .route('/giphy')
+  .post(authController.protect, userController.addFavoriteGiphy)
+  .delete(authController.protect, userController.deleteFavoriteGiphy);
 
 router
   .route('/:id')

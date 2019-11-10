@@ -47,16 +47,14 @@ exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
-  if (!email || !password) {
+  if (!email || !password)
     return next(new AppError('You must provide a username and password.', 400));
-  }
 
   // 2) Check if user exists && if password is correct
   const user = await User.findOne({ email: email }).select('+password');
 
-  if (!user || !(await user.isCorrectPassword(password, user.password))) {
+  if (!user || !(await user.isCorrectPassword(password, user.password)))
     return next(new AppError('Incorrect email or password.', 401));
-  }
 
   // 3) If everything OK, send token to client
   const token = signToken(user.id);
@@ -84,9 +82,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
   const currentUser = await User.findById(decoded.id);
 
-  if (!currentUser) {
-    return next(new AppError('User no longer exists', 401));
-  }
+  if (!currentUser) return next(new AppError('User no longer exists', 401));
 
   // Check if user changed password after JWT was issued
   if (currentUser.hasPasswordChanged(decoded.iat)) {
@@ -191,9 +187,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   });
 
   // if token has not exired and there is a user, set the new password
-  if (!user) {
-    return next(new AppError('Token is invalid or has expired.', 400));
-  }
+  if (!user) return next(new AppError('Token is invalid or has expired.', 400));
 
   // Update the password and remove the reset tokens
   user.password = req.body.password;
