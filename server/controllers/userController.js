@@ -1,7 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/user');
 const Giphy = require('../models/giphys');
-const GiphyUserTags = require('../models/giphy_user_tags');
+const GiphyUserTags = require('../models/giphyUserTags');
 
 const AppError = require('../utils/appError');
 
