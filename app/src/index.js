@@ -1,15 +1,29 @@
+// External
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import configureStore from "./redux/configureStore";
 import { BrowserRouter } from "react-router-dom";
+import axios from "axios";
 
-import "./index.css";
+// Internal
+import configureStore from "./redux/configureStore";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+// CSS
+import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
 
 const store = configureStore();
+
+// Setup global configurations for service calls
+axios.defaults.baseURL =
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:3001"
+    : "https://giphys.heb.com";
 
 ReactDOM.render(
   <Provider store={store}>

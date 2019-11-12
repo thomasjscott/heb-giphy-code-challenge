@@ -1,16 +1,15 @@
-// External
+// External Libraries
 import React, { Component } from "react";
-import { MDBContainer, MDBBtn } from "mdbreact";
 import { Field } from "redux-form";
+import { MDBContainer, MDBBtn } from "mdbreact";
 
-class Login extends Component {
+class Register extends Component {
   render() {
     return (
       <MDBContainer className="mt-4">
-        <p className="h4 text-center mb-4">Login</p>
+        <p className="h4 text-center mb-4">Register</p>
 
-        {/* Email */}
-        <label className="grey-text">Your email</label>
+        <label className="grey-text">Email</label>
         <Field
           name="email"
           component="input"
@@ -19,8 +18,7 @@ class Login extends Component {
           placeholder="E-Mail"
         />
 
-        {/* Password */}
-        <label className="grey-text">Your password</label>
+        <label className="grey-text mt-3">Password</label>
         <Field
           name="password"
           component="input"
@@ -30,14 +28,11 @@ class Login extends Component {
         />
 
         <div className="text-center mt-4">
-          {/* Submit Button */}
-          <MDBBtn color="indigo" type="submit">
-            Login
+          <MDBBtn color="primary" type="submit">
+            Register
           </MDBBtn>
-
-          {/* Register Button */}
           <MDBBtn color="secondary" onClick={() => this.props.toggleAuthForm()}>
-            Go To Register
+            Go To Login
           </MDBBtn>
         </div>
       </MDBContainer>
@@ -45,4 +40,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Register;
