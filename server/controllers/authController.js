@@ -8,7 +8,6 @@ const sendEmail = require('../utils/email');
 /**
  * Utility that creates a JWT token from a userId
  * @param {string} userId - user ID to create a JWT on behalf of
- * @return {string}       - Returns JWT token
  */
 const signToken = userId => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -19,14 +18,11 @@ const signToken = userId => {
 /**
  * Provides the user the ability to create an account.
  */
-exports.signUp = catchAsync(async (req, res, next) => {
+exports.signUp = catchAsync(async (req, res) => {
   // Allow only data needed to create new user
   const user = await User.create({
     email: req.body.email,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm
+    password: req.body.password
   });
 
   // Encrypt the user ID, sign it with a secret, and set expiration (7 Days)
@@ -40,23 +36,22 @@ exports.signUp = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Allows user to login
- * @return {string} - returns a payload that includes JWT token
+ * Allows user to login and return JWT Token
  */
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
-  // 1) Check if email and password exist
+  // Check if email and password exist
   if (!email || !password)
     return next(new AppError('You must provide a username and password.', 400));
 
-  // 2) Check if user exists && if password is correct
+  // Check if user exists && if password is correct
   const user = await User.findOne({ email: email }).select('+password');
 
   if (!user || !(await user.isCorrectPassword(password, user.password)))
     return next(new AppError('Incorrect email or password.', 401));
 
-  // 3) If everything OK, send token to client
+  // If everything OK, send token to client
   const token = signToken(user.id);
 
   res.status(200).json({
@@ -72,6 +67,7 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   //  Check if token in header is valid
   let token = req.headers.authorization;
+
   if (!token || !token.startsWith('Bearer '))
     return next(new AppError('You are not logged in.', 401));
 
@@ -80,7 +76,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Validate token and that user exists
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id).populate('giphys');
 
   if (!currentUser) return next(new AppError('User no longer exists', 401));
 
@@ -97,23 +93,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   // User is authenticated, proceed
   return next();
 });
-
-/**
- * Checks if currentUser has permission to access restricted route
- * @param {string} roles - string of role(s) that are allowed to access a given resource
- */
-exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
-    // Checks to see if the current user has permission to access the resource
-    if (!roles.includes(req.currentUser.role)) {
-      return next(
-        new AppError('User does not hace access to this resource.', 403)
-      );
-    }
-
-    return next();
-  };
-};
 
 /**
  * Provides functionality for user to reset their password
@@ -169,7 +148,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  if (!req.params.token || !req.body.password || !req.body.passwordConfirm) {
+  if (!req.params.token || !req.body.password) {
     return next(
       new AppError('Token, password, or password confirm missing.', 401)
     );
@@ -191,7 +170,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // Update the password and remove the reset tokens
   user.password = req.body.password;
-  user.passwordConfirm = req.body.passwordConfirm;
   user.passwordRestToken = undefined;
   user.passwordResetExpires = undefined;
 

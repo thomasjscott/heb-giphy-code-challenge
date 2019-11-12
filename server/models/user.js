@@ -13,16 +13,6 @@ const userSchema = new mongoose.Schema(
       maxlength: [100, 'Email cannot be longer than 100 characters.'],
       validate: [validator.isEmail, 'Must provide a valid email address.']
     },
-    firstName: {
-      type: String,
-      maxlength: [50, 'First name cannot be longer than 50 characters.'],
-      required: [true, 'First name is required.']
-    },
-    lastName: {
-      type: String,
-      maxlength: [50, 'First name cannot be longer than 50 characters.'],
-      required: [true, 'Last name is required.']
-    },
     password: {
       type: String,
       required: [true, 'Password is required.'],
@@ -34,22 +24,16 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user'
     },
-    // Never saved to database, only used for validation purposes
-    passwordConfirm: {
-      type: String,
-      required: [true, 'You must confirm your password.'],
-      validate: {
-        // This will only work when saving the record
-        validator: function(pwConfirm) {
-          return pwConfirm === this.password;
-        },
-        message: 'Password and Confirm Password are not the same.'
-      }
-    },
     createdAt: {
       type: Date,
       default: Date.now()
     },
+    giphys: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'giphys'
+      }
+    ],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date
@@ -61,13 +45,6 @@ const userSchema = new mongoose.Schema(
 );
 
 /**
- * Adds the fullName to the object instead of persisting an additional field into the DB
- */
-userSchema.virtual('fullName').get(function() {
-  return `${this.firstName} ${this.lastName}`;
-});
-
-/**
  * Run prior to record being saved into database
  */
 userSchema.pre('save', async function(next) {
@@ -76,9 +53,6 @@ userSchema.pre('save', async function(next) {
 
   // Salt & Encrypt Password
   this.password = await bcrypt.hash(this.password, 12);
-
-  // Set passwordConfirm to undefined so it is not saved to database
-  this.passwordConfirm = undefined;
 });
 
 /**
