@@ -3,14 +3,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Card from "./Card";
 import { MDBCol, MDBContainer, MDBRow } from "mdbreact";
+import { SEARCH_GIPHYS_ROUTE } from "../constants/ApplicationConstants";
+import { Link } from "react-router-dom";
 
 class MyGiphys extends Component {
   render() {
-    let cards = null;
+    let cardContent = null;
 
     // Creates cards to display
-    if (this.props.favoritedGiphys) {
-      cards = this.props.favoritedGiphys.map(giphy => {
+    if (this.props.favoritedGiphys && this.props.favoritedGiphys.length > 0) {
+      cardContent = this.props.favoritedGiphys.map(giphy => {
         return (
           <MDBCol size="6">
             <Card
@@ -21,6 +23,17 @@ class MyGiphys extends Component {
           </MDBCol>
         );
       });
+    } else {
+      console.log("NO CONTENT");
+      cardContent = (
+        <MDBCol md="12" className="ml-3">
+          <p>
+            You have not favorited any Giphys. You should try
+            {<Link to={SEARCH_GIPHYS_ROUTE}> searching </Link>}
+            for some and come back later.
+          </p>
+        </MDBCol>
+      );
     }
 
     return (
@@ -31,7 +44,7 @@ class MyGiphys extends Component {
           </MDBCol>
         </MDBContainer>
         <MDBContainer>
-          <MDBRow>{cards}</MDBRow>
+          <MDBRow>{cardContent}</MDBRow>
         </MDBContainer>
       </React.Fragment>
     );

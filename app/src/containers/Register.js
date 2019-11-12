@@ -7,8 +7,13 @@ class Register extends Component {
   render() {
     return (
       <MDBContainer className="mt-4">
-        <p className="h4 text-center mb-4">Register</p>
-
+        <p className="h4 mb-4">Register</p>
+        Register and have the ability to:
+        <ul>
+          <li>Search for Giphys</li>
+          <li>Save Giphys you love for future viewing</li>
+          <li>Tag Giphys to so you remember why you enjoyed them</li>
+        </ul>
         <label className="grey-text">Email</label>
         <Field
           name="email"
@@ -17,7 +22,6 @@ class Register extends Component {
           className="form-control"
           placeholder="E-Mail"
         />
-
         <label className="grey-text mt-3">Password</label>
         <Field
           name="password"
@@ -26,7 +30,6 @@ class Register extends Component {
           className="form-control"
           placeholder="Password"
         />
-
         <div className="text-center mt-4">
           <MDBBtn color="primary" type="submit">
             Register

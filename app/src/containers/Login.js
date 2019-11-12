@@ -7,7 +7,7 @@ class Login extends Component {
   render() {
     return (
       <MDBContainer className="mt-4">
-        <p className="h4 text-center mb-4">Login</p>
+        <p className="h4 mb-4">Login</p>
 
         {/* Email */}
         <label className="grey-text">Your email</label>

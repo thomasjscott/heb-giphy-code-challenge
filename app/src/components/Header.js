@@ -65,7 +65,12 @@ class Header extends React.Component {
     return (
       <MDBNavbar color="indigo" dark expand="md">
         <MDBNavbarBrand>
-          <strong className="white-text">HEB Giphy</strong>
+          <img
+            src={process.env.PUBLIC_URL + "/HebLogo.png"}
+            alt="Logo"
+            width="50px"
+            className="mr-4"
+          />{" "}
         </MDBNavbarBrand>
         {linksForLoggedIn}
         <MDBNavbarToggler onClick={this.toggleCollapse} />

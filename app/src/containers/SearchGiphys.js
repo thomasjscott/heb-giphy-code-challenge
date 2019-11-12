@@ -34,7 +34,7 @@ class SearchGiphys extends Component {
 
   render() {
     const { handleSubmit } = this.props;
-
+    let cardContent;
     if (this.state.isSearching) {
       return (
         <MDBContainer className="mt-3">
@@ -46,19 +46,29 @@ class SearchGiphys extends Component {
     }
 
     // Giphy Cards
-    const cards = this.state.giphys.map(giphy => {
-      return (
-        <MDBCol size="6">
-          <Card key={giphy.id} embedUrl={giphy.embed_url} giphyId={giphy.id} />
-        </MDBCol>
-      );
-    });
+    if (this.state.giphys.length > 0) {
+      cardContent = this.state.giphys.map(giphy => {
+        return (
+          <MDBCol size="6">
+            <Card
+              key={giphy.id}
+              embedUrl={giphy.embed_url}
+              giphyId={giphy.id}
+            />
+          </MDBCol>
+        );
+      });
+    }
 
     return (
       <React.Fragment>
         <MDBContainer className="mt-3">
           <MDBCol md="12">
-            <p className="h4 mb-4">Search Giphys</p>
+            <p className="h4 mb-2">Search Giphys</p>
+            <p>
+              Get started by searching for giphys and hitting Enter on your
+              keyboard
+            </p>
             <Form onSubmit={handleSubmit(this.submitHandler)}>
               <Field
                 name="giphySearch"
@@ -71,7 +81,7 @@ class SearchGiphys extends Component {
           </MDBCol>
         </MDBContainer>
         <MDBContainer>
-          <MDBRow>{cards}</MDBRow>
+          <MDBRow>{cardContent}</MDBRow>
         </MDBContainer>
       </React.Fragment>
     );
