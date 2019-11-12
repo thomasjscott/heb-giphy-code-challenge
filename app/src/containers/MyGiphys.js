@@ -24,7 +24,6 @@ class MyGiphys extends Component {
         );
       });
     } else {
-      console.log("NO CONTENT");
       cardContent = (
         <MDBCol md="12" className="ml-3">
           <p>
