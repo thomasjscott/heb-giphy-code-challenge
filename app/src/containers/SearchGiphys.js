@@ -6,6 +6,7 @@ import Spinner from "../components/Spinner";
 import Card from "./Card";
 import { searchGiphys } from "../services/GiphyServices";
 import { connect } from "react-redux";
+
 class SearchGiphys extends Component {
   constructor(props) {
     super(props);
@@ -13,11 +14,8 @@ class SearchGiphys extends Component {
     // Set local state so form is not submitting and there are no errors
     this.state = {
       isSearching: false,
-      error: undefined,
       giphys: []
     };
-
-    this.submitHandler = this.submitHandler.bind(this);
   }
 
   /**
@@ -35,6 +33,7 @@ class SearchGiphys extends Component {
   render() {
     const { handleSubmit } = this.props;
     let cardContent;
+
     if (this.state.isSearching) {
       return (
         <MDBContainer className="mt-3">
