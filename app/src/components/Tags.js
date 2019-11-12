@@ -11,12 +11,6 @@ import {
 } from "../redux/actions/UserActions";
 
 class Tags extends Component {
-  constructor(props) {
-    super(props);
-
-    this.submitHandler = this.submitHandler.bind(this);
-  }
-
   /**
    * Handles the submission of the form.
    */
@@ -151,9 +145,4 @@ const mapStateToProps = state => {
 
 export default reduxForm({
   form: TAG_FORM
-})(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Tags)
-);
+})(connect(mapStateToProps, mapDispatchToProps)(Tags));

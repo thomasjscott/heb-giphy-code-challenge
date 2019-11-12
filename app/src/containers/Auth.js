@@ -26,8 +26,6 @@ class Auth extends Component {
       error: undefined,
       displayLogin: true
     };
-
-    this.toggleAuthForm = this.toggleAuthForm.bind(this);
   }
 
   /**
@@ -161,9 +159,4 @@ const mapStateToProps = state => {
 
 export default reduxForm({
   form: AUTH_FORM
-})(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Auth)
-);
+})(connect(mapStateToProps, mapDispatchToProps)(Auth));
